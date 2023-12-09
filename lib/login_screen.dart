@@ -1,0 +1,158 @@
+import 'package:flutter/material.dart';
+
+class LoginScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(240),
+          child: AppBar(
+            backgroundColor: Color(0xFF2C7B50),
+            automaticallyImplyLeading: false,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      'assets/images/icon-rp-projeto.png',
+                      width: 157,
+                      height: 139,
+                      fit: BoxFit.contain,
+                      alignment: Alignment(0.00, 0.00),
+                    ),
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional(0.00, 1.00),
+                    child: Text(
+                      'PointJob',
+                      style: TextStyle(
+                        fontFamily: 'Days One',
+                        color: Colors.white,
+                        fontSize: 48,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              centerTitle: false,
+              expandedTitleScale: 1.0,
+            ),
+            elevation: 2,
+          ),
+        ),
+        body: SafeArea(
+          top: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Align(
+                alignment: AlignmentDirectional(0.00, -1.00),
+                child: Text(
+                  'LOGIN',
+                  style: TextStyle(
+                    fontFamily: 'Readex Pro',
+                    fontSize: 36,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                child: TextFormField(
+                  autofocus: true,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    labelText: 'Matrícula',
+                    labelStyle: TextStyle(fontSize: 16),
+                    hintStyle: TextStyle(fontSize: 16),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                child: TextFormField(
+                  autofocus: true,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    labelText: 'Senha',
+                    labelStyle: TextStyle(fontSize: 16),
+                    hintStyle: TextStyle(fontSize: 16),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  print('Button pressed ...');
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF2C7B50),
+                  minimumSize: Size(180, 40),
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'ENTRAR',
+                  style: TextStyle(
+                    fontFamily: 'Readex Pro',
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional(0.00, 1.00),
+                child: Text(
+                  'Esqueci minha senha',
+                  style: TextStyle(
+                    fontFamily: 'Readex Pro',
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
