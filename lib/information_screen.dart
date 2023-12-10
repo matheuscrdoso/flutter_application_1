@@ -1,134 +1,121 @@
 import 'package:flutter/material.dart';
 
 class InfoScreen extends StatelessWidget {
-  const InfoScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(200),
-          child: AppBar(
-            backgroundColor: const Color(0xFF2C7B50),
-            automaticallyImplyLeading: false,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'FUNCIONÁRIO',
-                    style: TextStyle(
-                      fontFamily: 'Readex Pro',
-                      color: Colors.white,
-                      fontSize: 24,
+                  Container(
+                    color: Color(0xFF2C7B50), // Fundo verde
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'FUNCIONÁRIO',
+                          style: TextStyle(
+                            fontFamily: 'Readex Pro',
+                            color: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundImage: AssetImage('assets/images/user_photo.jpg'),
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Nome do Funcionário',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            color: Colors.white,
+                            fontSize: 22,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(240)),
-                    child: Image.asset(
-                      'assets/images/user_photo.jpg',
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.fill,
+                  SizedBox(height: 24),
+                  _buildInfoItem(context, 'Matrícula', '123456'),
+                  _buildDivider(context),
+                  _buildInfoItem(context, 'Localização', 'endereço'),
+                  _buildDivider(context),
+                  _buildInfoItem(context, 'Data', '12/12/2023'),
+                  _buildDivider(context),
+                  _buildInfoItem(context, 'Horário', '15:40'),
+                  SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      print('Button pressed ...');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      primary: Color(0xFF2C7B50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                  ),
-                  const Text(
-                    'Nome do Funcionário',
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      color: Colors.white,
-                      fontSize: 22,
+                    child: Text(
+                      'CONFIRMAR',
+                      style: TextStyle(
+                        fontFamily: 'Readex Pro',
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ],
               ),
-              centerTitle: false,
-              expandedTitleScale: 1.0,
             ),
-            elevation: 2,
-          ),
-        ),
-        body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildInfoContainer(context, 'Matrícula', '123456'),
-              const Divider(
-                thickness: 1,
-                color: Color(0xFF49D183),
-              ),
-              _buildInfoContainer(context, 'Localização', 'endereço'),
-              const Divider(
-                thickness: 1,
-                color: Color(0xFF49D183),
-              ),
-              _buildInfoContainer(context, 'Data', '12/12/2023'),
-              const Divider(
-                thickness: 1,
-                color: Color(0xFF49D183),
-              ),
-              _buildInfoContainer(context, 'Horário', '15:40'),
-              ElevatedButton(
-                onPressed: () {
-                  print('Button pressed ...');
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: const Color(0xFF2C7B50),
-                  minimumSize: const Size(180, 40),
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  'CONFIRMAR',
-                  style: TextStyle(
-                    fontFamily: 'Readex Pro',
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildInfoContainer(BuildContext context, String title, String value) {
+  Widget _buildInfoItem(BuildContext context, String label, String value) {
     return Container(
-      width: 394,
-      height: 100,
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFEEEEEE),
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontFamily: 'Readex Pro',
-                fontSize: 18,
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontFamily: 'Readex Pro',
+              fontSize: 18,
             ),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            value,
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider(BuildContext context) {
+    return SizedBox(
+      height: 24,
+      child: Divider(
+        thickness: 1,
+        color: Color(0xFF49D183),
       ),
     );
   }
