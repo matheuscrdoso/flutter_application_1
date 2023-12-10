@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/home_page_widget.dart';
 
 class LoginScreen extends StatelessWidget {
+  final TextEditingController matriculaController = TextEditingController();
+  final TextEditingController senhaController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -66,6 +70,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                 child: TextFormField(
+                  controller: matriculaController,
                   autofocus: true,
                   obscureText: false,
                   decoration: InputDecoration(
@@ -93,8 +98,9 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                 child: TextFormField(
+                  controller: senhaController,
                   autofocus: true,
-                  obscureText: false,
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Senha',
                     labelStyle: TextStyle(fontSize: 16),
@@ -119,7 +125,18 @@ class LoginScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  print('Button pressed ...');
+                  if (matriculaController.text == 'admin' && senhaController.text == 'admin') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePageWidget()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Credenciais inválidas. Tente novamente.'),
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF2C7B50),
