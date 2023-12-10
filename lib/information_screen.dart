@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 
 class InfoScreen extends StatelessWidget {
   @override
@@ -48,11 +50,22 @@ class InfoScreen extends StatelessWidget {
                   SizedBox(height: 24),
                   _buildInfoItem(context, 'Matrícula', '123456'),
                   _buildDivider(context),
-                  _buildInfoItem(context, 'Localização', 'endereço'),
+                  FutureBuilder<String>(
+                    future: _getLocation(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Erro ao obter a localização');
+                      } else {
+                        return _buildInfoItem(context, 'Localização', snapshot.data ?? 'N/A');
+                      }
+                    },
+                  ),
                   _buildDivider(context),
-                  _buildInfoItem(context, 'Data', '12/12/2023'),
+                  _buildInfoItem(context, 'Data', _getCurrentDate()),
                   _buildDivider(context),
-                  _buildInfoItem(context, 'Horário', '15:40'),
+                  _buildInfoItem(context, 'Horário', _getCurrentTime()),
                   SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () {
@@ -118,5 +131,25 @@ class InfoScreen extends StatelessWidget {
         color: Color(0xFF49D183),
       ),
     );
+  }
+
+  // Função para obter a localização do usuário
+  Future<String> _getLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      return 'Lat: ${position.latitude}, Long: ${position.longitude}';
+    } catch (e) {
+      return 'Erro ao obter a localização';
+    }
+  }
+
+  // Função para obter a data atual
+  String _getCurrentDate() {
+    return DateFormat('dd/MM/yyyy').format(DateTime.now());
+  }
+
+  // Função para obter a hora atual
+  String _getCurrentTime() {
+    return DateFormat('HH:mm').format(DateTime.now());
   }
 }
