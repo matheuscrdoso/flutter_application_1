@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
-import 'information_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'login_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Solicitar permissões aqui
+  await _requestPermissions();
+
   runApp(const MyApp());
+}
+
+Future<void> _requestPermissions() async {
+  await Permission.camera.request();
+  await Permission.microphone.request();
+  await Permission.location.request();
 }
 
 class MyApp extends StatelessWidget {
@@ -11,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: InfoScreen(),
+      home: LoginScreen(),
     );
   }
 }

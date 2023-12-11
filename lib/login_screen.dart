@@ -16,8 +16,8 @@ class LoginScreen extends StatelessWidget {
           child: AppBar(
             backgroundColor: Color(0xFF2C7B50),
             automaticallyImplyLeading: false,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Column(
+            flexibleSpace: Center(
+              child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -31,21 +31,17 @@ class LoginScreen extends StatelessWidget {
                       alignment: Alignment(0.00, 0.00),
                     ),
                   ),
-                  Align(
-                    alignment: AlignmentDirectional(0.00, 1.00),
-                    child: Text(
-                      'PointJob',
-                      style: TextStyle(
-                        fontFamily: 'Days One',
-                        color: Colors.white,
-                        fontSize: 48,
-                      ),
+                  SizedBox(height: 16),
+                  Text(
+                    'PointJob',
+                    style: TextStyle(
+                      fontFamily: 'Days One',
+                      color: Colors.white,
+                      fontSize: 48,
                     ),
                   ),
                 ],
               ),
-              centerTitle: false,
-              expandedTitleScale: 1.0,
             ),
             elevation: 2,
           ),
@@ -57,14 +53,11 @@ class LoginScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Align(
-                alignment: AlignmentDirectional(0.00, -1.00),
-                child: Text(
-                  'LOGIN',
-                  style: TextStyle(
-                    fontFamily: 'Readex Pro',
-                    fontSize: 36,
-                  ),
+              Text(
+                'LOGIN',
+                style: TextStyle(
+                  fontFamily: 'Readex Pro',
+                  fontSize: 36,
                 ),
               ),
               Padding(
@@ -155,15 +148,12 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Align(
-                alignment: AlignmentDirectional(0.00, 1.00),
-                child: Text(
-                  'Esqueci minha senha',
-                  style: TextStyle(
-                    fontFamily: 'Readex Pro',
-                    fontSize: 16,
-                    decoration: TextDecoration.underline,
-                  ),
+              Text(
+                'Esqueci minha senha',
+                style: TextStyle(
+                  fontFamily: 'Readex Pro',
+                  fontSize: 16,
+                  decoration: TextDecoration.underline,
                 ),
               ),
             ],
