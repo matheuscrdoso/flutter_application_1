@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'reconhecimento_screen.dart'; // Substitua com o caminho correto
 
 import 'home_page_model.dart';
 
@@ -72,10 +73,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             padding: const EdgeInsets.all(16.0),
             child: ListView(
               children: [
-                
                 ElevatedButton(
                   onPressed: () {
-                    print('Button pressed ...');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FacialRecognitionPage()),
+                    );
                   },
                   child: Text(
                     'CONST01 - Construção 1',
@@ -102,8 +106,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     'OBRA014 - Obra Escola',
                     style: TextStyle(color: Colors.white),
                   ),
-                  style: 
-                  ElevatedButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
                     primary: Color(0xD1358B61),
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     elevation: 3,

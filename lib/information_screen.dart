@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
+import 'home_page_widget.dart';
 
 class InfoScreen extends StatelessWidget {
+  final String detectedName;
+
+  InfoScreen({required this.detectedName});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +42,7 @@ class InfoScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 12),
                         Text(
-                          'Nome do Funcionário',
+                          detectedName, // Usar o nome detectado
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Outfit',
@@ -69,7 +75,11 @@ class InfoScreen extends StatelessWidget {
                   SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () {
-                      print('Button pressed ...');
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomePageWidget()),
+                    );
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 16),
@@ -142,6 +152,26 @@ class InfoScreen extends StatelessWidget {
       return 'Erro ao obter a localização';
     }
   }
+
+ 
+//   Future<String> _getLocation() async {
+//   try {
+//     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+//     // Realiza a reversão geográfica
+//     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+
+//     if (placemarks.isNotEmpty) {
+//       Placemark placemark = placemarks.first;
+//       return 'Endereço: ${placemark.street}, ${placemark.subLocality}, ${placemark.locality}';
+//     } else {
+//       return 'Endereço não disponível';
+//     }
+//   } catch (e) {
+//     return 'Erro ao obter o endereço';
+//   }
+// }
+  
 
   // Função para obter a data atual
   String _getCurrentDate() {
