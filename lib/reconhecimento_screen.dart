@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:http/http.dart' as http;
 import 'home_page_model.dart';
-import 'information_screen.dart'; // Importe a tela de informações
+import 'information_screen.dart';
 
 class FacialRecognitionPage extends StatefulWidget {
   const FacialRecognitionPage({Key? key}) : super(key: key);
@@ -20,16 +20,18 @@ class _FacialRecognitionPageState extends State<FacialRecognitionPage> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    super.initState();
-    _model = HomePageModel();
-    _model.initState(context);
+@override
+void initState() {
+  super.initState();
+  _model = HomePageModel();
+  _model.initState(context);
 
-    _initializeCamera().then((_) {
-      setState(() {});
+  _initializeCamera().then((_) {
+    setState(() {
+      _isCameraInitialized = true;
     });
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -45,83 +47,87 @@ class _FacialRecognitionPageState extends State<FacialRecognitionPage> {
       await _cameraController!.initialize();
     } catch (e) {
       print('Erro ao inicializar a câmera: $e');
+      _showErrorScreen('Erro ao inicializar a câmera');
     }
   }
 
-  Future<void> _startFacialRecognition() async {
-    try {
-      // Abra a webcam antes de iniciar o reconhecimento facial
-      final responseOpenWebcam = await http.post(
-        Uri.parse('http://127.0.0.1:5000/open_webcam'),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (responseOpenWebcam.statusCode == 200) {
-        print('Webcam aberta com sucesso');
-      } else {
-        print('Erro ao abrir a webcam: ${responseOpenWebcam.statusCode}');
-        return;
-      }
-
-      if (_cameraController == null || !_cameraController!.value.isInitialized) {
-        print('Câmera não inicializada');
-        return;
-      }
-
-      XFile? imageFile = await _cameraController!.takePicture();
-
-      if (imageFile == null) {
-        print('Erro ao capturar imagem');
-        return;
-      }
-
-      List<int> imageBytes = await imageFile.readAsBytes();
-      String base64Image = base64Encode(imageBytes);
-
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:5000/recognize_face'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'imagem': base64Image}),
-      );
-
-      if (response.statusCode == 200) {
-        print(response.body);
-
-        // Extrair o nome detectado a partir da resposta
-        String detectedName = extractNameFromResponse(response.body);
-
-        // Navegar para a tela de informações
-        _navigateToInfoScreen(detectedName);
-      } else {
-        print('Erro na solicitação HTTP: ${response.statusCode}');
-        _showErrorScreen();
-      }
-    } catch (e) {
-      print('Erro durante o reconhecimento facial: $e');
-      _showErrorScreen();
+Future<void> _startFacialRecognition() async {
+  try {
+    if (!_isCameraInitialized || _cameraController == null || !_cameraController!.value.isInitialized) {
+      _showErrorScreen('Câmera não inicializada');
+      return;
     }
+
+    // Abre a webcam
+    await _openWebcam();
+
+    XFile? imageFile = await _cameraController!.takePicture();
+
+    if (imageFile == null) {
+      _showErrorScreen('Erro ao capturar imagem');
+      return;
+    }
+
+    List<int> imageBytes = await imageFile.readAsBytes();
+    String base64Image = base64Encode(imageBytes);
+
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/recognize_face'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'imagem': base64Image}),
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+
+      String detectedName = extractNameFromResponse(response.body);
+
+      _navigateToInfoScreen(detectedName);
+    } else {
+      print('Erro na solicitação HTTP: ${response.statusCode}');
+      _showErrorScreen('Erro na solicitação HTTP');
+    }
+  } catch (e) {
+    print('Erro durante o reconhecimento facial: $e');
+    _showErrorScreen('Erro durante o reconhecimento facial');
+  } finally {
+    _cameraController?.dispose();
   }
+}
+
+Future<void> _openWebcam() async {
+  try {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/open_webcam'),
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      print('Erro ao abrir a webcam: ${response.statusCode}');
+      _showErrorScreen('Erro ao abrir a webcam');
+    }
+  } catch (e) {
+    print('Erro ao abrir a webcam: $e');
+    _showErrorScreen('Erro ao abrir a webcam');
+  }
+}
 
   String extractNameFromResponse(String responseBody) {
     try {
-      // Parse o JSON da resposta
       Map<String, dynamic> responseJson = jsonDecode(responseBody);
 
-      // Verifique se a resposta contém a chave 'nomes_detectados'
       if (responseJson.containsKey('nomes_detectados')) {
-        // Obtenha a lista de nomes detectados
-        List<String> nomesDetectados = List<String>.from(responseJson['nomes_detectados']);
+        List<String> detectedNames = List<String>.from(responseJson['nomes_detectados']);
 
-        // Verifique se a lista não está vazia e retorne o primeiro nome
-        if (nomesDetectados.isNotEmpty) {
-          return nomesDetectados[0];
+        if (detectedNames.isNotEmpty) {
+          return detectedNames[0];
         }
       }
     } catch (e) {
       print('Erro ao extrair o nome da resposta: $e');
     }
 
-    // Em caso de erro ou se não houver nomes detectados, retorne "Desconhecido"
     return 'Desconhecido';
   }
 
@@ -134,18 +140,17 @@ class _FacialRecognitionPageState extends State<FacialRecognitionPage> {
     );
   }
 
-  void _showErrorScreen() {
-    // Mostrar tela de erro
+  void _showErrorScreen(String errorMessage) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Erro"),
-          content: Text("Não foi possível reconhecer a pessoa."),
+          content: Text(errorMessage),
           actions: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context); // Fechar o diálogo de erro
+                Navigator.pop(context);
               },
               child: Text("OK"),
             ),
@@ -179,7 +184,7 @@ class _FacialRecognitionPageState extends State<FacialRecognitionPage> {
           title: Align(
             alignment: AlignmentDirectional(-1.00, 1.00),
             child: Text(
-              'Reconhecimento',
+              'Reconhecimento Facial',
               style: Theme.of(context).textTheme.headline6!.copyWith(
                     fontFamily: 'Outfit',
                     color: Colors.white,

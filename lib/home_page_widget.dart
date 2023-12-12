@@ -100,7 +100,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 SizedBox(height: 35), // Adiciona espaço entre os botões
                 ElevatedButton(
                   onPressed: () {
-                    print('Button 2 pressed ...');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FacialRecognitionPage()),
+                    );
                   },
                   child: Text(
                     'OBRA014 - Obra Escola',
@@ -121,7 +125,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 SizedBox(height: 35), // Adiciona espaço entre os botões
                 ElevatedButton(
                   onPressed: () {
-                    print('Button 3 pressed ...');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FacialRecognitionPage()),
+                    );
                   },
                   child: Text(
                     'CONST007 - Prédio 7',
@@ -142,7 +150,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 SizedBox(height: 35), // Adiciona espaço entre os botões
                 ElevatedButton(
                   onPressed: () {
-                    print('Button 4 pressed ...');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FacialRecognitionPage()),
+                    );
                   },
                   child: Text(
                     'CONST02 - Construção 2',
