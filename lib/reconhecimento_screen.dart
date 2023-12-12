@@ -15,7 +15,7 @@ class FacialRecognitionPage extends StatefulWidget {
 
 class _FacialRecognitionPageState extends State<FacialRecognitionPage> {
   late HomePageModel _model;
-  late CameraController? _cameraController;
+  CameraController? _cameraController;
   bool _isCameraInitialized = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -54,6 +54,11 @@ void initState() {
 Future<void> _startFacialRecognition() async {
   try {
     if (!_isCameraInitialized || _cameraController == null || !_cameraController!.value.isInitialized) {
+      _showErrorScreen('Câmera não inicializada');
+      return;
+    }
+
+    if (_cameraController == null) {
       _showErrorScreen('Câmera não inicializada');
       return;
     }
